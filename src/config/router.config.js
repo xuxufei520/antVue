@@ -1,10 +1,10 @@
 // eslint-disable-next-line
-import { UserLayout, BasicLayout, BlankLayout } from '@/layouts'
+import { UserLayout, BasicLayout, BlankLayout, PageView } from '@/layouts'
 import { bxAnaalyse } from '@/core/icons'
 
 const RouteView = {
   name: 'RouteView',
-  render: h => h('router-view')
+  render: (h) => h('router-view')
 }
 
 export const asyncRouterMap = [
@@ -13,7 +13,7 @@ export const asyncRouterMap = [
     name: 'index',
     component: BasicLayout,
     meta: { title: 'menu.home' },
-    redirect: '/dashboard/workplace',
+    redirect: '/account/center',
     children: [
       // dashboard
       {
@@ -265,29 +265,35 @@ export const asyncRouterMap = [
                 }
               }
             ]
+          },
+          {
+            path: '/account/todayHot',
+            name: 'todayHot',
+            component: () => import('@/views/account/todayHot/index.vue'),
+            meta: { title: '今日热点', keepAlive: true, permission: ['user'] }
           }
         ]
-      }
+      },
 
       // other
-      /*
+
       {
         path: '/other',
         name: 'otherPage',
         component: PageView,
-        meta: { title: '其他组件', icon: 'slack', permission: [ 'dashboard' ] },
+        meta: { title: '其他组件', icon: 'slack', permission: ['dashboard'] },
         redirect: '/other/icon-selector',
         children: [
           {
             path: '/other/icon-selector',
             name: 'TestIconSelect',
             component: () => import('@/views/other/IconSelectorView'),
-            meta: { title: 'IconSelector', icon: 'tool', keepAlive: true, permission: [ 'dashboard' ] }
+            meta: { title: 'IconSelector', icon: 'tool', keepAlive: true, permission: ['dashboard'] }
           },
           {
             path: '/other/list',
             component: RouteView,
-            meta: { title: '业务布局', icon: 'layout', permission: [ 'support' ] },
+            meta: { title: '业务布局', icon: 'layout', permission: ['support'] },
             redirect: '/other/list/tree-list',
             children: [
               {
@@ -314,12 +320,12 @@ export const asyncRouterMap = [
                 component: () => import('@/views/other/RoleList'),
                 meta: { title: '角色列表', keepAlive: true }
               },
-              {
-                path: '/other/list/system-role',
-                name: 'SystemRole',
-                component: () => import('@/views/role/RoleList'),
-                meta: { title: '角色列表2', keepAlive: true }
-              },
+              // {
+              //   path: '/other/list/system-role',
+              //   name: 'SystemRole',
+              //   component: () => import('@/views/role/RoleList'),
+              //   meta: { title: '角色列表2', keepAlive: true }
+              // },
               {
                 path: '/other/list/permission-list',
                 name: 'PermissionList',
@@ -329,8 +335,22 @@ export const asyncRouterMap = [
             ]
           }
         ]
+      },
+      {
+        path: '/componentsUse',
+        name: 'componentsUse',
+        component: PageView,
+        meta: { title: '组件展示', icon: 'slack', permission: ['dashboard'] },
+        redirect: '/componentsUse/WordCloud',
+        children: [
+          {
+            path: '/componentsUse/WordCloud',
+            name: 'componentsUseWordCloud',
+            component: () => import('@/views/componentsUse/WordCloud'),
+            meta: { title: '词云', keepAlive: true }
+          }
+        ]
       }
-      */
     ]
   },
   {

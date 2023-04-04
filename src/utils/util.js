@@ -5,7 +5,7 @@ export function timeFix () {
 }
 
 export function welcome () {
-  const arr = ['休息一会儿吧', '准备吃什么呢?', '要不要打一把 DOTA', '我猜你可能累了']
+  const arr = ['休息一会儿吧', '准备吃什么呢?', '我猜你可能累了']
   const index = Math.floor(Math.random() * arr.length)
   return arr[index]
 }
@@ -27,7 +27,7 @@ export function handleScrollHeader (callback) {
   callback = callback || function () {}
   window.addEventListener(
     'scroll',
-    event => {
+    (event) => {
       clearTimeout(timer)
       timer = setTimeout(() => {
         let direction = 'up'
@@ -73,21 +73,21 @@ export function scorePassword (pass) {
   // award every unique letter until 5 repetitions
   const letters = {}
   for (let i = 0; i < pass.length; i++) {
-      letters[pass[i]] = (letters[pass[i]] || 0) + 1
-      score += 5.0 / letters[pass[i]]
+    letters[pass[i]] = (letters[pass[i]] || 0) + 1
+    score += 5.0 / letters[pass[i]]
   }
 
   // bonus points for mixing it up
   const variations = {
-      digits: /\d/.test(pass),
-      lower: /[a-z]/.test(pass),
-      upper: /[A-Z]/.test(pass),
-      nonWords: /\W/.test(pass)
+    digits: /\d/.test(pass),
+    lower: /[a-z]/.test(pass),
+    upper: /[A-Z]/.test(pass),
+    nonWords: /\W/.test(pass)
   }
 
   let variationCount = 0
   for (var check in variations) {
-      variationCount += (variations[check] === true) ? 1 : 0
+    variationCount += variations[check] === true ? 1 : 0
   }
   score += (variationCount - 1) * 10
 

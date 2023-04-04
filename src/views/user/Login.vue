@@ -1,19 +1,20 @@
 <template>
   <div class="main">
-    <a-form
-      id="formLogin"
-      class="user-layout-login"
-      ref="formLogin"
-      :form="form"
-      @submit="handleSubmit"
-    >
+    <LoginGround></LoginGround>
+    <a-form id="formLogin" class="user-layout-login" ref="formLogin" :form="form" @submit="handleSubmit">
       <a-tabs
         :activeKey="customActiveKey"
         :tabBarStyle="{ textAlign: 'center', borderBottom: 'unset' }"
         @change="handleTabClick"
       >
         <a-tab-pane key="tab1" :tab="$t('user.login.tab-login-credentials')">
-          <a-alert v-if="isLoginError" type="error" showIcon style="margin-bottom: 24px;" :message="$t('user.login.message-invalid-credentials')" />
+          <a-alert
+            v-if="isLoginError"
+            type="error"
+            showIcon
+            style="margin-bottom: 24px"
+            :message="$t('user.login.message-invalid-credentials')"
+          />
           <a-form-item>
             <a-input
               size="large"
@@ -21,10 +22,16 @@
               :placeholder="$t('user.login.username.placeholder')"
               v-decorator="[
                 'username',
-                {rules: [{ required: true, message: $t('user.userName.required') }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
+                {
+                  rules: [
+                    { required: true, message: $t('user.userName.required') },
+                    { validator: handleUsernameOrEmail }
+                  ],
+                  validateTrigger: 'change'
+                }
               ]"
             >
-              <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+              <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }" />
             </a-input>
           </a-form-item>
 
@@ -34,25 +41,47 @@
               :placeholder="$t('user.login.password.placeholder')"
               v-decorator="[
                 'password',
-                {rules: [{ required: true, message: $t('user.password.required') }], validateTrigger: 'blur'}
+                { rules: [{ required: true, message: $t('user.password.required') }], validateTrigger: 'blur' }
               ]"
             >
-              <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+              <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }" />
             </a-input-password>
           </a-form-item>
         </a-tab-pane>
         <a-tab-pane key="tab2" :tab="$t('user.login.tab-login-mobile')">
           <a-form-item>
-            <a-input size="large" type="text" :placeholder="$t('user.login.mobile.placeholder')" v-decorator="['mobile', {rules: [{ required: true, pattern: /^1[34578]\d{9}$/, message: $t('user.login.mobile.placeholder') }], validateTrigger: 'change'}]">
-              <a-icon slot="prefix" type="mobile" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+            <a-input
+              size="large"
+              type="text"
+              :placeholder="$t('user.login.mobile.placeholder')"
+              v-decorator="[
+                'mobile',
+                {
+                  rules: [{ required: true, pattern: /^1[34578]\d{9}$/, message: $t('user.login.mobile.placeholder') }],
+                  validateTrigger: 'change'
+                }
+              ]"
+            >
+              <a-icon slot="prefix" type="mobile" :style="{ color: 'rgba(0,0,0,.25)' }" />
             </a-input>
           </a-form-item>
 
           <a-row :gutter="16">
             <a-col class="gutter-row" :span="16">
               <a-form-item>
-                <a-input size="large" type="text" :placeholder="$t('user.login.mobile.verification-code.placeholder')" v-decorator="['captcha', {rules: [{ required: true, message: $t('user.verification-code.required') }], validateTrigger: 'blur'}]">
-                  <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+                <a-input
+                  size="large"
+                  type="text"
+                  :placeholder="$t('user.login.mobile.verification-code.placeholder')"
+                  v-decorator="[
+                    'captcha',
+                    {
+                      rules: [{ required: true, message: $t('user.verification-code.required') }],
+                      validateTrigger: 'blur'
+                    }
+                  ]"
+                >
+                  <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }" />
                 </a-input>
               </a-form-item>
             </a-col>
@@ -62,7 +91,7 @@
                 tabindex="-1"
                 :disabled="state.smsSendBtn"
                 @click.stop.prevent="getCaptcha"
-                v-text="!state.smsSendBtn && $t('user.register.get-verification-code') || (state.time+' s')"
+                v-text="(!state.smsSendBtn && $t('user.register.get-verification-code')) || state.time + ' s'"
               ></a-button>
             </a-col>
           </a-row>
@@ -70,15 +99,15 @@
       </a-tabs>
 
       <a-form-item>
-        <a-checkbox v-decorator="['rememberMe', { valuePropName: 'checked' }]">{{ $t('user.login.remember-me') }}</a-checkbox>
-        <router-link
-          :to="{ name: 'recover', params: { user: 'aaa'} }"
-          class="forge-password"
-          style="float: right;"
-        >{{ $t('user.login.forgot-password') }}</router-link>
+        <a-checkbox v-decorator="['rememberMe', { valuePropName: 'checked' }]">{{
+          $t('user.login.remember-me')
+        }}</a-checkbox>
+        <router-link :to="{ name: 'recover', params: { user: 'aaa' } }" class="forge-password" style="float: right">{{
+          $t('user.login.forgot-password')
+        }}</router-link>
       </a-form-item>
 
-      <a-form-item style="margin-top:24px">
+      <a-form-item style="margin-top: 24px">
         <a-button
           size="large"
           type="primary"
@@ -86,20 +115,11 @@
           class="login-button"
           :loading="state.loginBtn"
           :disabled="state.loginBtn"
-        >{{ $t('user.login.login') }}</a-button>
+        >{{ $t('user.login.login') }}</a-button
+        >
       </a-form-item>
 
       <div class="user-login-other">
-        <span>{{ $t('user.login.sign-in-with') }}</span>
-        <a>
-          <a-icon class="item-icon" type="alipay-circle"></a-icon>
-        </a>
-        <a>
-          <a-icon class="item-icon" type="taobao-circle"></a-icon>
-        </a>
-        <a>
-          <a-icon class="item-icon" type="weibo-circle"></a-icon>
-        </a>
         <router-link class="register" :to="{ name: 'register' }">{{ $t('user.login.signup') }}</router-link>
       </div>
     </a-form>
@@ -119,10 +139,11 @@ import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
 import { getSmsCaptcha, get2step } from '@/api/login'
-
+import LoginGround from '@/components/LoginGround/index.vue'
 export default {
   components: {
-    TwoStepCaptcha
+    TwoStepCaptcha,
+    LoginGround
   },
   data () {
     return {
@@ -144,8 +165,8 @@ export default {
     }
   },
   created () {
-    get2step({ })
-      .then(res => {
+    get2step({})
+      .then((res) => {
         this.requiredTwoStepCaptcha = res.result.stepCode
       })
       .catch(() => {
@@ -192,7 +213,7 @@ export default {
           loginParams.password = md5(values.password)
           Login(loginParams)
             .then((res) => this.loginSuccess(res))
-            .catch(err => this.requestFailed(err))
+            .catch((err) => this.requestFailed(err))
             .finally(() => {
               state.loginBtn = false
             })
@@ -205,7 +226,10 @@ export default {
     },
     getCaptcha (e) {
       e.preventDefault()
-      const { form: { validateFields }, state } = this
+      const {
+        form: { validateFields },
+        state
+      } = this
 
       validateFields(['mobile'], { force: true }, (err, values) => {
         if (!err) {
@@ -220,20 +244,22 @@ export default {
           }, 1000)
 
           const hide = this.$message.loading('验证码发送中..', 0)
-          getSmsCaptcha({ mobile: values.mobile }).then(res => {
-            setTimeout(hide, 2500)
-            this.$notification['success']({
-              message: '提示',
-              description: '验证码获取成功，您的验证码为：' + res.result.captcha,
-              duration: 8
+          getSmsCaptcha({ mobile: values.mobile })
+            .then((res) => {
+              setTimeout(hide, 2500)
+              this.$notification['success']({
+                message: '提示',
+                description: '验证码获取成功，您的验证码为：' + res.result.captcha,
+                duration: 8
+              })
             })
-          }).catch(err => {
-            setTimeout(hide, 1)
-            clearInterval(interval)
-            state.time = 60
-            state.smsSendBtn = false
-            this.requestFailed(err)
-          })
+            .catch((err) => {
+              setTimeout(hide, 1)
+              clearInterval(interval)
+              state.time = 60
+              state.smsSendBtn = false
+              this.requestFailed(err)
+            })
         }
       })
     },
@@ -283,6 +309,8 @@ export default {
 
 <style lang="less" scoped>
 .user-layout-login {
+  position: relative;
+  z-index: 2;
   label {
     font-size: 14px;
   }

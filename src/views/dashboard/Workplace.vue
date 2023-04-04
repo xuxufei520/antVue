@@ -9,7 +9,7 @@
           <div class="content-title">
             {{ timeFix }}，{{ user.name }}<span class="welcome-text">，{{ welcome }}</span>
           </div>
-          <div>前端工程师 | 蚂蚁金服 - 某某某事业群 - VUE平台</div>
+          <div>VUE平台</div>
         </div>
       </div>
     </template>
@@ -19,7 +19,7 @@
           <a-statistic title="项目数" :value="56" />
         </div>
         <div class="stat-item">
-          <a-statistic title="团队内排名" :value="8" suffix="/ 24" />
+          <a-statistic title="团队内排名" :value="1" suffix="/ 24" />
         </div>
         <div class="stat-item">
           <a-statistic title="项目访问" :value="2223" />
@@ -33,7 +33,7 @@
           <a-card
             class="project-list"
             :loading="loading"
-            style="margin-bottom: 24px;"
+            style="margin-bottom: 24px"
             :bordered="false"
             title="进行中的项目"
             :body-style="{ padding: 0 }"
@@ -108,7 +108,7 @@
             :bordered="false"
             :body-style="{ padding: 0 }"
           >
-            <div style="min-height: 400px;">
+            <div style="min-height: 400px">
               <!-- :scale="scale" :axis1Opts="axis1Opts" :axis2Opts="axis2Opts"  -->
               <radar :data="radarData" />
             </div>
@@ -202,12 +202,11 @@ export default {
   },
   computed: {
     ...mapState({
-      nickname: state => state.user.nickname,
-      welcome: state => state.user.welcome
+      nickname: (state) => state.user.nickname,
+      welcome: (state) => state.user.welcome
     }),
     currentUser () {
       return {
-        name: 'Serati Ma',
         avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png'
       }
     },
@@ -219,11 +218,11 @@ export default {
     this.user = this.userInfo
     this.avatar = this.userInfo.avatar
 
-    getRoleList().then(res => {
+    getRoleList().then((res) => {
       // console.log('workplace -> call getRoleList()', res)
     })
 
-    getServiceList().then(res => {
+    getServiceList().then((res) => {
       // console.log('workplace -> call getServiceList()', res)
     })
   },
@@ -235,25 +234,25 @@ export default {
   },
   methods: {
     getProjects () {
-      this.$http.get('/list/search/projects').then(res => {
+      this.$http.get('/list/search/projects').then((res) => {
         this.projects = res.result && res.result.data
         this.loading = false
       })
     },
     getActivity () {
-      this.$http.get('/workplace/activity').then(res => {
+      this.$http.get('/workplace/activity').then((res) => {
         this.activities = res.result
       })
     },
     getTeams () {
-      this.$http.get('/workplace/teams').then(res => {
+      this.$http.get('/workplace/teams').then((res) => {
         this.teams = res.result
       })
     },
     initRadar () {
       this.radarLoading = true
 
-      this.$http.get('/workplace/radar').then(res => {
+      this.$http.get('/workplace/radar').then((res) => {
         const dv = new DataSet.View().source(res.result)
         dv.transform({
           type: 'fold',
