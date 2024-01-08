@@ -6,11 +6,7 @@
         <a-row :gutter="24">
           <a-col
             style="padding-left: 0; padding-right: 0"
-            :sm="24"
-            :md="12"
-            :lg="8"
-            :xl="6"
-            :xxl="6"
+            v-bind="labelCol"
             v-for="(item, index) in labelList"
             :key="index"
           >
@@ -19,16 +15,7 @@
             </a-form-item>
           </a-col>
           <slot name="extendCol"></slot>
-          <a-col
-            v-if="showBtn"
-            :sm="24"
-            :md="12"
-            :lg="8"
-            :xl="6"
-            :xxl="6"
-            class="float"
-            style="padding-left: 0; padding-right: 0"
-          >
+          <a-col v-if="showBtn" v-bind="labelCol" class="float" style="padding-left: 0; padding-right: 0">
             <a-form-item>
               <span class="querybar_submit_buttons">
                 <slot name="buttons">
@@ -73,6 +60,18 @@ export default {
     refreshQueryBtnText: {
       type: String,
       default: '重置'
+    },
+    labelCol: {
+      type: Object,
+      default: () => {
+        return {
+          sm: 24,
+          md: 12,
+          lg: 8,
+          xl: 6,
+          xxl: 6
+        }
+      }
     }
   },
   mounted () {
