@@ -93,3 +93,36 @@ export function scorePassword (pass) {
 
   return parseInt(score)
 }
+/**
+ * description 计算区间总时长 (去除重叠区间)
+ * @param intervals : number[][]
+ * @returns totalDuration
+ */
+export const calculateTotalDuration =  (intervals) => {
+  // 假设intervals是一个二维数组，其中每个子数组包含两个元素：[startTime, endTime]
+
+  // 按照开始时间排序
+  intervals.sort((a, b) => a[0] - b[0]);
+
+  let stack = []; // 用于存储当前活动的区间
+  let totalDuration = 0;
+
+  for (let i = 0; i < intervals.length; i++) {
+      const [start, end] = intervals[i];
+
+      // 如果栈为空或当前区间与栈顶区间不重叠，推入栈中
+      if (stack.length === 0 || stack[stack.length - 1][1] <= start) {
+          stack.push([start, end]);
+      } else { // 否则，更新栈顶区间的结束时间
+          stack[stack.length - 1][1] = Math.max(stack[stack.length - 1][1], end);
+      }
+  }
+
+  // 累加栈中所有区间的时长
+  for (let i = 0; i < stack.length; i++) {
+      const [start, end] = stack[i];
+      totalDuration += end - start;
+  }
+
+  return totalDuration;
+}
